@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.RadioGroup;
 
@@ -53,6 +54,12 @@ public class LoginActivity extends BaseActivity {
                     stud_checked = false;
 
                 }
+            }
+        });
+        binding.register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this,StudentRegister.class));
             }
         });
         binding.loginsubmit.setOnClickListener(new View.OnClickListener() {
@@ -106,6 +113,7 @@ public class LoginActivity extends BaseActivity {
                                 try {
 
                                     JSONObject jsonObject = new JSONObject(response.body().string());
+                                    Log.e("value",jsonObject.toString());
                                     int succ = jsonObject.getInt("success");
 
                                     if (succ == 1) {

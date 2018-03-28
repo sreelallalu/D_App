@@ -28,8 +28,8 @@ public interface ApiInterface {
             (@FieldMap HashMap<String, String> hashMap);
 
     @FormUrlEncoded
-    @POST("register.php")
-    Call<ResponseBody> register(@FieldMap HashMap<String, String> hashMap);
+    @POST("stud_register.php")
+    Call<ResponseBody> stud_register(@FieldMap HashMap<String, String> hashMap);
 
 
     @FormUrlEncoded
@@ -59,6 +59,9 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("addnotes.php")
     Call<AddSuccess> addnotes(@FieldMap HashMap<String, String> hashMap);
+    @FormUrlEncoded
+    @POST("addsyllabus.php")
+    Call<AddSuccess> addsyllubus(@FieldMap HashMap<String, String> hashMap);
     @FormUrlEncoded
     @POST("assignment.php")
     Call<AddSuccess> assignment(@FieldMap HashMap<String, String> hashMap);

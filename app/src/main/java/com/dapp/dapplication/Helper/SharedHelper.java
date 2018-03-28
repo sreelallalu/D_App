@@ -35,12 +35,6 @@ public class SharedHelper {
 
 
 
-    public void setWelcome(boolean b) {
-        mSharedPreferences.edit().putBoolean(SHAREVALUE.welcomescreen, b).apply();
-
-    }
-
-
     public void setLoginCheck(boolean b) {
         mSharedPreferences.edit().putBoolean(SHAREVALUE.logincheck, b).apply();
 

@@ -37,80 +37,79 @@ import retrofit2.Response;
 
 public class AddNotes extends BaseActivity {
 
-    private static final int GALLERYPICK =103 ;
+    private static final int GALLERYPICK = 103;
     private AdminNotesBinding binding;
     private String filepath;
     private BranchAdapter brachadapter;
     private List<BatchModel.Datum> batch_list;
-    private List<SemModel.Datum> sem_list=new ArrayList<>();
+    private List<SemModel.Datum> sem_list = new ArrayList<>();
     private SemAdapter semAdapter;
     private String batchId;
-    private List<SubjectModel.Datum> subjest_list=new ArrayList<>();
+    private List<SubjectModel.Datum> subjest_list = new ArrayList<>();
     private SubjectAdapter subjectAdapter;
     private String subjectId;
     private String semtId;
     private String regType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.admin_notes);
 
 
-        SharedHelper sharedHelper=new SharedHelper(this);
-       final String regType = sharedHelper.getRegType();
+        SharedHelper sharedHelper = new SharedHelper(this);
+        final String regType = sharedHelper.getRegType();
 
         getBranches();
         binding.filePick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                    try {
-                        Intent intent = new Intent();
-                        intent.setType("application/pdf");
-                        intent.setAction(Intent.ACTION_GET_CONTENT);
-                        startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERYPICK);
-                    } catch (Exception e) {
-                        // showsnackbar("Something went wrong");
-                        e.printStackTrace();
-                    }
-
+                try {
+                    Intent intent = new Intent();
+                    intent.setType("application/pdf");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERYPICK);
+                } catch (Exception e) {
+                    // showsnackbar("Something went wrong");
+                    e.printStackTrace();
                 }
+
+            }
 
         });
         binding.uploadbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                boolean check=true;
+                boolean check = true;
 
-                String notes=binding.title.getText().toString().trim();
-                if(notes.isEmpty())
-                {
-                    check=false;
+                String notes = binding.title.getText().toString().trim();
+                if (notes.isEmpty()) {
+                    check = false;
                     binding.title.setError("Invalid title");
 
                 }
-                if(check){
+                if (check) {
 
-                    final ProgressDialog dialog=new ProgressDialog(AddNotes.this);
+                    final ProgressDialog dialog = new ProgressDialog(AddNotes.this);
                     dialog.setMessage("Loading...");
                     dialog.show();
-                  String encodedImage = "";
-                if (filepath != null) {
-                   encodedImage=convertFileToByteArray(new File(filepath));
+                    String encodedImage = "";
+                    if (filepath != null) {
+                        encodedImage = convertFileToByteArray(new File(filepath));
 
 
-                }
+                    }
 
 
-                HashMap<String,String> hashMap=new HashMap<>();
-                hashMap.put("data",encodedImage);
-                hashMap.put("br_id",batchId);
-                hashMap.put("se_id",semtId);
-                hashMap.put("su_id",subjectId);
-                hashMap.put("notes",notes);
-                hashMap.put("reg_type",regType);
-
+                    HashMap<String, String> hashMap = new HashMap<>();
+                    hashMap.put("data", encodedImage);
+                    hashMap.put("br_id", batchId);
+                    hashMap.put("se_id", semtId);
+                    hashMap.put("su_id", subjectId);
+                    hashMap.put("notes", notes);
+                    hashMap.put("reg_type", regType);
 
 
                     RestBuilderPro.getService().addnotes(hashMap).enqueue(new Callback<AddSuccess>() {
@@ -121,10 +120,9 @@ public class AddNotes extends BaseActivity {
                             if (response.isSuccessful()) {
                                 try {
 
-                                    AddSuccess data=response.body();
+                                    AddSuccess data = response.body();
 
-                                    if(data.getSuccess()==1)
-                                    {
+                                    if (data.getSuccess() == 1) {
 
                                         SnakBarCallback("Success", new CallbackSnak() {
                                             @Override
@@ -135,8 +133,7 @@ public class AddNotes extends BaseActivity {
                                         });
 
 
-
-                                    }else{
+                                    } else {
                                         SnakBar("Failed");
                                     }
 
@@ -158,13 +155,14 @@ public class AddNotes extends BaseActivity {
                     });
 
 
-            }
+                }
 
 
             }
         });
 
     }
+
     public static String convertFileToByteArray(File f) {
         byte[] byteArray = null;
         try {
@@ -277,12 +275,10 @@ public class AddNotes extends BaseActivity {
             public void onFailure(Call<SemModel> call, Throwable t) {
                 binding.semLoading.setVisibility(View.GONE);
                 SnakBar("Server could not connect");
-                Log.e("error",t.getMessage());
+                Log.e("error", t.getMessage());
 
             }
         });
-
-
 
 
     }
@@ -290,7 +286,7 @@ public class AddNotes extends BaseActivity {
     private class SemlistClick implements AdapterView.OnItemSelectedListener {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            SemModel.Datum data =sem_list.get(position);
+            SemModel.Datum data = sem_list.get(position);
             if (data.getSeName() != "") {
                 SubjectApi(data.getSeId() + "");
             }
@@ -305,8 +301,9 @@ public class AddNotes extends BaseActivity {
 
     private void SubjectApi(final String s) {
 
-        if(batchId==null)
-        {return;}
+        if (batchId == null) {
+            return;
+        }
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("br_id", batchId);
         hashMap.put("se_id", s);
@@ -341,7 +338,7 @@ public class AddNotes extends BaseActivity {
             public void onFailure(Call<SubjectModel> call, Throwable t) {
                 binding.subjLoading.setVisibility(View.GONE);
                 SnakBar("Server could not connect");
-                Log.e("error",t.getMessage());
+                Log.e("error", t.getMessage());
             }
         });
     }
@@ -349,7 +346,7 @@ public class AddNotes extends BaseActivity {
     private class SublistClick implements AdapterView.OnItemSelectedListener {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            SubjectModel.Datum data =subjest_list.get(position);
+            SubjectModel.Datum data = subjest_list.get(position);
             if (data.getSuName() != "") {
                 subjectId = String.valueOf(data.getSuId());
             }
@@ -365,16 +362,16 @@ public class AddNotes extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-      if(requestCode==GALLERYPICK&&resultCode==RESULT_OK) {
-          Uri pickedImage = data.getData();
+        if (requestCode == GALLERYPICK && resultCode == RESULT_OK) {
+            Uri pickedImage = data.getData();
 
-          if (null != pickedImage) {
-              // Get the path from the Uri
-              filepath = SelectedFilePath.getPath(AddNotes.this, pickedImage);
-               binding.fileText.setText(new File(filepath).getName());
+            if (null != pickedImage) {
+                // Get the path from the Uri
+                filepath = SelectedFilePath.getPath(AddNotes.this, pickedImage);
+                binding.fileText.setText(new File(filepath).getName());
 
-          }
-      }
+            }
+        }
     }
 
 }

@@ -3,18 +3,24 @@ package com.dapp.dapplication;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
+import com.dapp.dapplication.Helper.SharedHelper;
 import com.dapp.dapplication.databinding.AdminHomepageBinding;
 
 public class AdminDashBoard extends BaseActivity {
 
     private AdminHomepageBinding binding;
+    private SharedHelper sharedHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_homepage);
+        sharedHelper = new SharedHelper(this);
         binding = DataBindingUtil.setContentView(AdminDashBoard.this, R.layout.admin_homepage);
 
         binding.addAssignment.setOnClickListener(new View.OnClickListener() {
@@ -73,5 +79,29 @@ public class AdminDashBoard extends BaseActivity {
             }
         });
 
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return true;
+
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int ID = item.getItemId();
+
+        if (ID == R.id.sign_out) {
+
+            sharedHelper.setStudent("");
+            sharedHelper.setRegType("");
+            sharedHelper.setLoginCheck(false);
+
+            startActivity(new Intent(this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK));
+            finish();
+            return true;
+
+        }
+        return false;
     }
 }

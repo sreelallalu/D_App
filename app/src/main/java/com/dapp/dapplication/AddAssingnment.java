@@ -34,12 +34,14 @@ public class AddAssingnment extends BaseActivity {
     private List<SemModel.Datum> sem_list=new ArrayList<>();
     private SemAdapter semAdapter;
     private String batchId;
+    private String semtId;
+    private String regType;
+
     private List<SubjectModel.Datum> subjest_list=new ArrayList<>();
     private SubjectAdapter subjectAdapter;
     private String subjectId;
     private String subjectId1;
-    private String semtId;
-    private String regType;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

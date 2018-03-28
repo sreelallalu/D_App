@@ -41,6 +41,7 @@ public class Splash extends BaseActivity {
                     startActivity(new Intent(Splash.this, LoginActivity.class));
 
                 }
+                finish();
             }
         }, 2000);
 
