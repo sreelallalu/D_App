@@ -2,7 +2,6 @@ package com.dapp.dapplication.service;
 
 import com.dapp.dapplication.model.AddSuccess;
 import com.dapp.dapplication.model.BatchModel;
-import com.dapp.dapplication.model.LoginModel;
 import com.dapp.dapplication.model.SemModel;
 import com.dapp.dapplication.model.StudentModel;
 import com.dapp.dapplication.model.SubjectModel;
@@ -25,7 +24,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("login.php")
-    Call<LoginModel> login
+    Call<ResponseBody> login
             (@FieldMap HashMap<String, String> hashMap);
 
     @FormUrlEncoded

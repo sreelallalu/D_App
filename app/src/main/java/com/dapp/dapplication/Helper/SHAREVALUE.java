@@ -18,6 +18,7 @@ public interface SHAREVALUE {
     String welcomescreen="welcome_screen";
     String logincheck="login_check";
     String firebasetoken="firebase_token";
+    String Teacher="teacher";
 
 
     String CATG_ID="catgID";

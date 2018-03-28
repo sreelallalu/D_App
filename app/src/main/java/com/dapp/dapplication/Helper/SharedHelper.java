@@ -20,12 +20,19 @@ public class SharedHelper {
     }
 
 
-    public void setUserDetails(String userDetails) {
+    public void setStudent(String userDetails) {
 
 
         mSharedPreferences.edit().putString(SHAREVALUE.User_detail, userDetails).apply();
 
     }
+    public String getStudentDetails() {
+
+
+        return mSharedPreferences.getString(SHAREVALUE.User_detail, "");
+
+    }
+
 
 
     public void setWelcome(boolean b) {
@@ -39,10 +46,6 @@ public class SharedHelper {
 
     }
 
-    public void setFirebaseToken(String token) {
-        mSharedPreferences.edit().putString(SHAREVALUE.firebasetoken, token).apply();
-
-    }
 
 
     public String getRegType() {

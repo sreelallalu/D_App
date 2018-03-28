@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:custom="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
 
@@ -20,38 +21,37 @@
 -->
 
 
-
             <LinearLayout
-                android:gravity="center"
-                android:background="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@color/white"
+                android:gravity="center"
                 android:orientation="vertical"
                 android:paddingTop="30dp">
 
 
-
                 <LinearLayout
-                    android:gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="5dp"
+                    android:gravity="center"
                     android:orientation="vertical">
 
                     <RadioGroup
-
+                        android:padding="5dp"
                         android:id="@+id/logincheck"
-
                         android:layout_width="match_parent"
+
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-
                         android:layout_marginLeft="5dp"
+
                         android:layout_marginTop="2dp"
                         android:layout_weight="1"
+                        android:background="@color/green"
                         android:gravity="left"
                         android:orientation="horizontal">
 
@@ -60,11 +60,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-
                             android:layout_weight="1"
                             android:checked="true"
-
                             android:text="Student"
+
+                            android:textColor="@color/white"
                             android:textSize="10sp" />
 
                         <RadioButton
@@ -72,9 +72,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-
                             android:layout_weight="1"
+
                             android:text="Department"
+                            android:textColor="@color/white"
                             android:textSize="10sp" />
 
 
@@ -126,16 +127,16 @@
 
 
                     <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
+                        android:background="@drawable/shadow_square"
+                        android:elevation="2dp"
+                        android:orientation="horizontal"
+                        android:paddingBottom="4dp"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:layout_width="match_parent"
-                        android:background="@drawable/shadow_square"
-                        android:layout_height="wrap_content"
-                        android:elevation="2dp"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="4dp"
-                        android:orientation="horizontal">
+                        android:paddingTop="10dp">
 
                         <ImageView
                             android:layout_width="27dp"
@@ -151,8 +152,8 @@
                             android:hint="Password"
 
 
-                            app:passwordToggleEnabled="true"
-                            android:paddingLeft="5dp">
+                            android:paddingLeft="5dp"
+                            app:passwordToggleEnabled="true">
 
                             <EditText
 
@@ -170,9 +171,6 @@
 
 
                     <Button
-                        android:textColor="@color/white"
-                        android:text="Login"
-                        android:background="@color/colorPrimaryDark"
                         android:id="@+id/loginsubmit"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
@@ -180,19 +178,21 @@
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
                         android:layout_marginTop="25dp"
+                        android:background="@color/colorPrimaryDark"
                         android:elevation="3dp"
-                />
+                        android:text="Login"
+                        android:textColor="@color/white" />
 
 
                     <TextView
-                        android:textSize="14sp"
+                        android:id="@+id/register"
+                        android:layout_width="250dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
                         android:layout_marginTop="10dp"
                         android:gravity="center"
-                        android:layout_gravity="center"
-                        android:id="@+id/register"
                         android:text="Register"
-                        android:layout_width="250dp"
-                        android:layout_height="40dp" />
+                        android:textSize="14sp" />
                 </LinearLayout>
 
             </LinearLayout>

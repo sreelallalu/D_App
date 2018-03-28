@@ -9,11 +9,14 @@ import android.widget.RadioGroup;
 
 import com.dapp.dapplication.Helper.SharedHelper;
 import com.dapp.dapplication.databinding.ActivityLoginBinding;
-import com.dapp.dapplication.model.LoginModel;
 import com.dapp.dapplication.service.RestBuilderPro;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,12 +35,6 @@ public class LoginActivity extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         binding.student.setChecked(true);
         stud_checked = true;
-        SharedHelper sharedHelper=new SharedHelper(LoginActivity.this);
-        if(sharedHelper.getLoginCheck())
-        {
-            startActivity(new Intent(LoginActivity.this,AdminDashBoard.class));
-            finish();
-        }
 
         binding.logincheck.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -45,10 +42,14 @@ public class LoginActivity extends BaseActivity {
                 if (checkedId == binding.student.getId()) {
                     binding.register.setVisibility(View.VISIBLE);
                     stud_checked = true;
+                    binding.loginid.setHint("Register Id");
 
                 } else {
                     binding.register.setVisibility(View.INVISIBLE);
                     reg_type = "admin";
+                    binding.loginid.setHint("Department Id");
+
+
                     stud_checked = false;
 
                 }
@@ -60,95 +61,117 @@ public class LoginActivity extends BaseActivity {
 
                 String _username = binding.loginid.getText().toString();
                 String password = binding.loginpass.getText().toString();
-                boolean check=true;
+                boolean check = true;
 
 
-             if(_username.isEmpty())
-             {
-                 binding.loginid.setError("invalid id");
-                  check=false;
-             }
-             if(password.isEmpty())
-             {
+                if (_username.isEmpty()) {
+                    binding.loginid.setError("invalid id");
+                    check = false;
+                }
+                if (password.isEmpty()) {
 
-                 binding.loginid.setError("invalid password");
-                 check=false;
+                    binding.loginid.setError("invalid password");
+                    check = false;
 
-             }
+                }
 
 
-             if(check)
-             {
-                 if (stud_checked) {
-                     reg_type = "student";
+                if (check) {
+                    if (stud_checked) {
+                        reg_type = "student";
 
-                 } else {
-                     if (_username.equalsIgnoreCase("admin")) {
-                         reg_type = "admin";
-                     } else {
+                    } else {
+                        if (_username.equalsIgnoreCase("admin")) {
+                            reg_type = "admin";
+                        } else {
 
-                         reg_type = "teacher";
-                     }
-                 }
+                            reg_type = "teacher";
+                        }
+                    }
 
-                 HashMap<String,String> hashMap=new HashMap<>();
-                 hashMap.put("user_type",reg_type);
-                 hashMap.put("user_password",password);
-                 hashMap.put("user_name",_username);
-                final ProgressDialog dialog=new ProgressDialog(LoginActivity.this);
-                 dialog.setMessage("Loading...");
-                 dialog.show();
+                    HashMap<String, String> hashMap = new HashMap<>();
+                    hashMap.put("user_type", reg_type);
+                    hashMap.put("user_password", password);
+                    hashMap.put("user_name", _username);
+                    final ProgressDialog dialog = new ProgressDialog(LoginActivity.this);
+                    dialog.setMessage("Loading...");
+                    dialog.show();
 
-                 RestBuilderPro.getService().login(hashMap).enqueue(new Callback<LoginModel>() {
-                     @Override
-                     public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
-                         dialog.dismiss();
+                    RestBuilderPro.getService().login(hashMap).enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            dialog.dismiss();
 
-                         if (response.isSuccessful()) {
-                             try {
+                            if (response.isSuccessful()) {
+                                try {
 
-                                LoginModel data=response.body();
-                                if(data.getSuccess()==1)
-                                {
+                                    JSONObject jsonObject = new JSONObject(response.body().string());
+                                    int succ = jsonObject.getInt("success");
 
-                                    SnakBarCallback("Login success", new CallbackSnak() {
-                                        @Override
-                                        public void back() {
-                                            SharedHelper sharedHelper=new SharedHelper(LoginActivity.this);
-                                            sharedHelper.setRegType(reg_type);
-                                            sharedHelper.setLoginCheck(true);
-                                            startActivity(new Intent(LoginActivity.this,AdminDashBoard.class));
-                                            finish();
-                                        }
-                                    });
+                                    if (succ == 1) {
+                                        JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                        final JSONObject jsonObject1 = jsonArray.getJSONObject(0);
 
 
+                                        SnakBarCallback("Login success", new CallbackSnak() {
+                                            @Override
+                                            public void back() {
 
-                                }else{
-                                    SnakBar("check user credentials");
+                                                if (reg_type.equalsIgnoreCase("student")) {
+
+                                                    SharedHelper sharedHelper = new SharedHelper(LoginActivity.this);
+                                                    sharedHelper.setRegType(reg_type);
+                                                    sharedHelper.setLoginCheck(true);
+                                                    sharedHelper.setStudent(jsonObject1.toString());
+                                                    startActivity(new Intent(LoginActivity.this, StudentDashBoard.class));
+
+
+
+                                                } else if (reg_type.equalsIgnoreCase("admin")) {
+                                                    SharedHelper sharedHelper = new SharedHelper(LoginActivity.this);
+                                                    sharedHelper.setRegType(reg_type);
+                                                    sharedHelper.setLoginCheck(true);
+                                                    startActivity(new Intent(LoginActivity.this, AdminDashBoard.class));
+
+                                                } else if (reg_type.equalsIgnoreCase("teacher")) {
+
+                                                    SharedHelper sharedHelper = new SharedHelper(LoginActivity.this);
+                                                    sharedHelper.setRegType(reg_type);
+                                                    sharedHelper.setLoginCheck(true);
+                                                    startActivity(new Intent(LoginActivity.this, AdminDashBoard.class));
+
+                                                }
+
+
+
+
+                                                finish();
+                                            }
+                                        });
+
+
+                                    } else {
+                                        SnakBar("check user credentials");
+                                    }
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+
                                 }
+                            }
 
-                             } catch (Exception e) {
-                                 e.printStackTrace();
+                        }
 
-                             }
-                         }
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            dialog.dismiss();
+                            SnakBar("Server could not connect");
 
-                     }
-
-                     @Override
-                     public void onFailure(Call<LoginModel> call, Throwable t) {
-                         dialog.dismiss();
-                         SnakBar("Server could not connect");
-
-                     }
-                 });
+                        }
+                    });
 
 
-
-
-
-             }
+                }
 
             }
         });
