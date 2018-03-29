@@ -10,7 +10,6 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".LoginActivity" />
@@ -26,16 +25,16 @@
         </provider>
 
         <activity android:name=".BaseActivity" />
-        <activity android:name=".AdminDashBoard" />
-        <activity android:name=".AddAssingnment" />
-        <activity android:name=".AddSyllabus" />
-        <activity android:name=".AddTimetable" />
-        <activity android:name=".AddAttendance" />
-        <activity android:name=".AddNotes" />
-        <activity android:name=".AddTutorial" />
-        <activity android:name=".AddNotification" />
-        <activity android:name=".AddSessinal" />
-        <activity android:name=".StudentView" />
+        <activity android:name=".admin_module.AdminDashBoard" />
+        <activity android:name=".admin_module.AddAssingnment" />
+        <activity android:name=".admin_module.AddSyllabus" />
+        <activity android:name=".admin_module.AddTimetable" />
+        <activity android:name=".admin_module.AddAttendance" />
+        <activity android:name=".admin_module.AddNotes" />
+        <activity android:name=".admin_module.AddTutorial" />
+        <activity android:name=".admin_module.AddNotification" />
+        <activity android:name=".admin_module.AddSessinal" />
+        <activity android:name=".admin_module.StudentView" />
         <activity
             android:name=".Splash"
             android:theme="@style/AppTheme.NoActionBar">
@@ -46,7 +45,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".StudentDashBoard" />
-        <activity android:name=".StudentRegister"></activity>
+        <activity android:name=".StudentRegister" />
+        <activity android:name=".admin_module.FeedbackView"></activity>
     </application>
 
 </manifest>

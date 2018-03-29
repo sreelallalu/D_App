@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.dapp.dapplication.Helper.SharedHelper;
+import com.dapp.dapplication.admin_module.AdminDashBoard;
 
 public class Splash extends BaseActivity {
 

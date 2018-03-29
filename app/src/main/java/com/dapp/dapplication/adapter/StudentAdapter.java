@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.dapp.dapplication.AddAttendance;
+import com.dapp.dapplication.admin_module.AddAttendance;
 import com.dapp.dapplication.R;
-import com.dapp.dapplication.StudentView;
+import com.dapp.dapplication.admin_module.StudentView;
 import com.dapp.dapplication.model.StudentModel;
 
 import java.util.List;

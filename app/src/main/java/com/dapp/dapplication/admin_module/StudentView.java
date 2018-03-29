@@ -1,4 +1,4 @@
-package com.dapp.dapplication;
+package com.dapp.dapplication.admin_module;
 
 import android.app.ProgressDialog;
 import android.databinding.DataBindingUtil;
@@ -7,7 +7,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.dapp.dapplication.BaseActivity;
 import com.dapp.dapplication.Helper.SharedHelper;
+import com.dapp.dapplication.R;
 import com.dapp.dapplication.adapter.SubjectAdapter;
 import com.dapp.dapplication.databinding.AdminStudentViewBinding;
 import com.dapp.dapplication.model.AddSuccess;

@@ -1,31 +1,25 @@
-package com.dapp.dapplication;
+package com.dapp.dapplication.admin_module;
 
-import android.content.Intent;
+import android.app.ProgressDialog;
 import android.databinding.DataBindingUtil;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 
-import com.dapp.dapplication.Helper.SelectedFilePath;
+import com.dapp.dapplication.BaseActivity;
 import com.dapp.dapplication.Helper.SharedHelper;
+import com.dapp.dapplication.R;
 import com.dapp.dapplication.adapter.BranchAdapter;
 import com.dapp.dapplication.adapter.SemAdapter;
 import com.dapp.dapplication.adapter.SubjectAdapter;
-import com.dapp.dapplication.databinding.AdminNotesBinding;
+import com.dapp.dapplication.databinding.AdminTutorialBinding;
 import com.dapp.dapplication.model.AddSuccess;
 import com.dapp.dapplication.model.BatchModel;
 import com.dapp.dapplication.model.SemModel;
 import com.dapp.dapplication.model.SubjectModel;
 import com.dapp.dapplication.service.RestBuilderPro;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,11 +28,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddSyllabus extends BaseActivity {
-
-    private static final int GALLERYPICK = 103;
-    private AdminNotesBinding binding;
-    private String filepath;
+public class AddTutorial extends BaseActivity {
     private BranchAdapter brachadapter;
     private List<BatchModel.Datum> batch_list;
     private List<SemModel.Datum> sem_list = new ArrayList<>();
@@ -49,74 +39,52 @@ public class AddSyllabus extends BaseActivity {
     private String subjectId;
     private String semtId;
     private String regType;
+    private AdminTutorialBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.admin_notes);
-
+        setContentView(R.layout.admin_tutorial);
+        binding = DataBindingUtil.setContentView(this, R.layout.admin_tutorial);
+        getBranches();
 
         SharedHelper sharedHelper = new SharedHelper(this);
-        final String regType = sharedHelper.getRegType();
-
-        getBranches();
-        binding.filePick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                try {
-                    Intent intent = new Intent();
-                    intent.setType("application/pdf");
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERYPICK);
-                } catch (Exception e) {
-                    // showsnackbar("Something went wrong");
-                    e.printStackTrace();
-                }
-
-            }
-
-        });
+        regType = sharedHelper.getRegType();
         binding.uploadbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                String videolink = binding.videoLink.getText().toString().trim();
+                String notes = binding.notes.getText().toString().trim();
                 boolean check = true;
 
-                String notes = binding.title.getText().toString().trim();
+                if (videolink.isEmpty()) {
+                    binding.videoLink.setError("Invalid video link");
+                }
                 if (notes.isEmpty()) {
-                    check = false;
-                    binding.title.setError("Invalid title");
+                    binding.notes.setError("Invalid video link");
+
 
                 }
                 if (check) {
 
-                    LoadingOn(binding.uploadbutton);
-
-
-                    String encodedImage = "";
-                    if (filepath != null) {
-                        encodedImage = convertFileToByteArray(new File(filepath));
-
-
-                    }
-
+                    final ProgressDialog dialog = new ProgressDialog(AddTutorial.this);
+                    dialog.setMessage("Loading..");
+                    dialog.show();
 
                     HashMap<String, String> hashMap = new HashMap<>();
-                    hashMap.put("data", encodedImage);
                     hashMap.put("br_id", batchId);
                     hashMap.put("se_id", semtId);
                     hashMap.put("su_id", subjectId);
-                    hashMap.put("notes", notes);
                     hashMap.put("reg_type", regType);
+                    hashMap.put("videolink", videolink);
+                    hashMap.put("notes", notes);
 
-
-                    RestBuilderPro.getService().addsyllubus(hashMap).enqueue(new Callback<AddSuccess>() {
+                    RestBuilderPro.getService().addtutorial(hashMap).enqueue(new Callback<AddSuccess>() {
                         @Override
                         public void onResponse(Call<AddSuccess> call, Response<AddSuccess> response) {
+                            dialog.dismiss();
 
 
-                            LoadingOff(binding.uploadbutton);
                             if (response.isSuccessful()) {
                                 try {
 
@@ -142,14 +110,11 @@ public class AddSyllabus extends BaseActivity {
 
                                 }
                             }
-
                         }
 
                         @Override
                         public void onFailure(Call<AddSuccess> call, Throwable t) {
-                            LoadingOff(binding.uploadbutton);
-                            Log.e("error",t.getMessage());
-
+                            dialog.dismiss();
                             SnakBar("Server could not connect");
 
                         }
@@ -162,28 +127,7 @@ public class AddSyllabus extends BaseActivity {
             }
         });
 
-    }
 
-    public static String convertFileToByteArray(File f) {
-        byte[] byteArray = null;
-        try {
-            InputStream inputStream = new FileInputStream(f);
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            byte[] b = new byte[1024 * 11];
-            int bytesRead = 0;
-
-            while ((bytesRead = inputStream.read(b)) != -1) {
-                bos.write(b, 0, bytesRead);
-            }
-
-            byteArray = bos.toByteArray();
-
-            Log.e("Byte array", ">" + byteArray);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return Base64.encodeToString(byteArray, Base64.NO_WRAP);
     }
 
     private void getBranches() {
@@ -200,10 +144,10 @@ public class AddSyllabus extends BaseActivity {
 
                     batch_list = model.getData();
 
-                    brachadapter = new BranchAdapter(AddSyllabus.this, batch_list);
+                    brachadapter = new BranchAdapter(AddTutorial.this, batch_list);
                     binding.branchSpinner.setAdapter(brachadapter);
                     brachadapter.notifyDataSetChanged();
-                    binding.branchSpinner.setOnItemSelectedListener(new AddSyllabus.BatChlistClick());
+                    binding.branchSpinner.setOnItemSelectedListener(new AddTutorial.BatChlistClick());
 
                 } else {
                     SnakBar("Batch list is empty");
@@ -245,7 +189,7 @@ public class AddSyllabus extends BaseActivity {
 
         binding.semLoading.setVisibility(View.VISIBLE);
         sem_list.clear();
-        semAdapter = new SemAdapter(AddSyllabus.this, sem_list);
+        semAdapter = new SemAdapter(AddTutorial.this, sem_list);
         binding.semesterSpinner.setAdapter(semAdapter);
         semAdapter.notifyDataSetChanged();
 
@@ -262,10 +206,10 @@ public class AddSyllabus extends BaseActivity {
 
                     batchId = brId;
 
-                    semAdapter = new SemAdapter(AddSyllabus.this, sem_list);
+                    semAdapter = new SemAdapter(AddTutorial.this, sem_list);
                     binding.semesterSpinner.setAdapter(semAdapter);
                     semAdapter.notifyDataSetChanged();
-                    binding.semesterSpinner.setOnItemSelectedListener(new AddSyllabus.SemlistClick());
+                    binding.semesterSpinner.setOnItemSelectedListener(new AddTutorial.SemlistClick());
 
                 } else {
                     SnakBar("Semester list is empty");
@@ -311,7 +255,7 @@ public class AddSyllabus extends BaseActivity {
 
         binding.subjLoading.setVisibility(View.VISIBLE);
         subjest_list.clear();
-        subjectAdapter = new SubjectAdapter(AddSyllabus.this, subjest_list);
+        subjectAdapter = new SubjectAdapter(AddTutorial.this, subjest_list);
         binding.subjctSpinner.setAdapter(subjectAdapter);
         subjectAdapter.notifyDataSetChanged();
         RestBuilderPro.getService().subjectlist(hashMap).enqueue(new Callback<SubjectModel>() {
@@ -325,10 +269,10 @@ public class AddSyllabus extends BaseActivity {
                     subjest_list = model.getData();
                     semtId = s;
 
-                    subjectAdapter = new SubjectAdapter(AddSyllabus.this, subjest_list);
+                    subjectAdapter = new SubjectAdapter(AddTutorial.this, subjest_list);
                     binding.subjctSpinner.setAdapter(subjectAdapter);
                     subjectAdapter.notifyDataSetChanged();
-                    binding.subjctSpinner.setOnItemSelectedListener(new AddSyllabus.SublistClick());
+                    binding.subjctSpinner.setOnItemSelectedListener(new AddTutorial.SublistClick());
 
                 } else {
                     SnakBar("Semester list is empty");
@@ -359,22 +303,4 @@ public class AddSyllabus extends BaseActivity {
 
         }
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GALLERYPICK && resultCode == RESULT_OK) {
-            Uri pickedImage = data.getData();
-
-            if (null != pickedImage) {
-
-
-                try {
-                    filepath = SelectedFilePath.getPath(AddSyllabus.this, pickedImage);
-                    binding.fileText.setText(new File(filepath).getName());
-                }catch (Exception e){e.printStackTrace();}
-            }
-        }
-    }
-
 }

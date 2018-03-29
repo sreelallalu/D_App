@@ -20,7 +20,7 @@ public class StudentDashBoard extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
+        inflater.inflate(R.menu.mainstud, menu);
         return true;
 
     }

@@ -4,6 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.dapp.dapplication.AddSessinal">
+    tools:context="com.dapp.dapplication.admin_module.AddSessinal">
 
 </android.support.constraint.ConstraintLayout>
