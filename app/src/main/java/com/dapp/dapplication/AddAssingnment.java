@@ -71,6 +71,8 @@ public class AddAssingnment extends BaseActivity {
                 }
                 if(check)
                 {
+
+
                     HashMap<String,String> hashMap=new HashMap<>();
                     hashMap.put("br_id",batchId);
                     hashMap.put("su_id",subjectId);
