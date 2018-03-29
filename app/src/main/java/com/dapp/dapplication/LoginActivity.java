@@ -4,10 +4,13 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.RadioGroup;
 
+import com.dapp.dapplication.Helper.PERMISSION;
+import com.dapp.dapplication.Helper.PermissionHelper;
 import com.dapp.dapplication.Helper.SharedHelper;
 import com.dapp.dapplication.databinding.ActivityLoginBinding;
 import com.dapp.dapplication.service.RestBuilderPro;
@@ -27,6 +30,7 @@ public class LoginActivity extends BaseActivity {
     private ActivityLoginBinding binding;
     private String reg_type;
     private boolean stud_checked;
+    private PermissionHelper permissionHelper;
 
 
     @Override
@@ -36,6 +40,8 @@ public class LoginActivity extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         binding.student.setChecked(true);
         stud_checked = true;
+
+        permission();
 
         binding.logincheck.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -186,4 +192,33 @@ public class LoginActivity extends BaseActivity {
 
 
     }
+
+    private void permission() {
+        permissionHelper = new PermissionHelper(this, PERMISSION.ALL, 123);
+        permissionHelper.request(new PermissionHelper.PermissionCallback() {
+            @Override
+            public void onPermissionGranted() {
+
+            }
+
+            @Override
+            public void onPermissionDenied() {
+
+            }
+
+            @Override
+            public void onPermissionDeniedBySystem() {
+
+            }
+        });
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if (permissionHelper != null) {
+            permissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
+    }
+
 }

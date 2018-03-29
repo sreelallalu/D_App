@@ -1,6 +1,5 @@
 package com.dapp.dapplication;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
@@ -92,9 +91,7 @@ public class AddSyllabus extends BaseActivity {
                 }
                 if (check) {
 
-                    final ProgressDialog dialog = new ProgressDialog(AddSyllabus.this);
-                    dialog.setMessage("Loading...");
-                    dialog.show();
+                    LoadingOn(binding.uploadbutton);
 
 
                     String encodedImage = "";
@@ -117,8 +114,9 @@ public class AddSyllabus extends BaseActivity {
                     RestBuilderPro.getService().addsyllubus(hashMap).enqueue(new Callback<AddSuccess>() {
                         @Override
                         public void onResponse(Call<AddSuccess> call, Response<AddSuccess> response) {
-                            dialog.dismiss();
 
+
+                            LoadingOff(binding.uploadbutton);
                             if (response.isSuccessful()) {
                                 try {
 
@@ -149,7 +147,8 @@ public class AddSyllabus extends BaseActivity {
 
                         @Override
                         public void onFailure(Call<AddSuccess> call, Throwable t) {
-                            dialog.dismiss();
+                            LoadingOff(binding.uploadbutton);
+                            Log.e("error",t.getMessage());
 
                             SnakBar("Server could not connect");
 
@@ -368,10 +367,12 @@ public class AddSyllabus extends BaseActivity {
             Uri pickedImage = data.getData();
 
             if (null != pickedImage) {
-                // Get the path from the Uri
-                filepath = SelectedFilePath.getPath(AddSyllabus.this, pickedImage);
-                binding.fileText.setText(new File(filepath).getName());
 
+
+                try {
+                    filepath = SelectedFilePath.getPath(AddSyllabus.this, pickedImage);
+                    binding.fileText.setText(new File(filepath).getName());
+                }catch (Exception e){e.printStackTrace();}
             }
         }
     }

@@ -1,76 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp"
-    android:orientation="vertical">
-
-    <Spinner
-        android:id="@+id/branch_spinner"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="15dp" />
+        android:layout_height="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
 
-    <Spinner
-        android:id="@+id/semester_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="15dp" />
-
-    <EditText
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:hint="title"
-        android:inputType="textPersonName" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layout_marginTop="15dp"
-        android:background="@android:color/holo_purple"
-        android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/file_text"
+            android:id="@+id/text1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="5dp"
-            android:layout_weight="1.5"
-            android:text="file extension must be pdf and size less than 2 mb"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
+            android:text="Branches"
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
 
-        <Button
-            android:id="@+id/file_pick"
-            android:layout_width="130dp"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            >
+
+            <Spinner
+                android:id="@+id/branch_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                />
+
+            <ProgressBar
+                android:id="@+id/branchLoading"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="false"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="30dp"
+                android:visibility="gone" />
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/text17"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Semester"
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            >
+
+            <Spinner
+                android:id="@+id/semester_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                />
+
+            <ProgressBar
+                android:id="@+id/semLoading"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="false"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="30dp"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+
+        <EditText
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:hint="title"
+            android:inputType="textPersonName" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginTop="15dp"
+            android:background="@android:color/holo_purple"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/file_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1.5"
+                android:text="file extension must be pdf and size less than 2 mb"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/file_pick"
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/buttonColor"
+                android:text="Pick File"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+        <com.dapp.dapplication.lib.loadingbutton.CircularProgressButton
+            android:layout_marginTop="20dp"
             android:layout_gravity="center"
-            android:background="@color/buttonColor"
-            android:text="Pick File"
-            android:textColor="@color/white" />
+            android:id="@+id/uploadbutton"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/round_button"
+            android:gravity="center"
+            android:text="Upload"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:textSize="15sp"
+            app:finalCornerAngle="50dp"
+            app:initialCornerAngle="0dp"
+            app:spinning_bar_color="@android:color/holo_blue_bright"
+            app:spinning_bar_padding="8dp"
+            app:spinning_bar_width="3dp" />
+
 
     </LinearLayout>
-
-    <Button
-        android:id="@+id/uploadbutton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@color/colorPrimary"
-        android:text="Upload"
-        android:textColor="@color/white" />
-</LinearLayout>
 </layout>

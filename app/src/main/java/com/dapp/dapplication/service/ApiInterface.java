@@ -62,9 +62,23 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("addsyllabus.php")
     Call<AddSuccess> addsyllubus(@FieldMap HashMap<String, String> hashMap);
+
+    @FormUrlEncoded
+    @POST("addtimetable.php")
+    Call<AddSuccess> addtimetable(@FieldMap HashMap<String, String> hashMap);
+
+    @FormUrlEncoded
+    @POST("addtutorial.php")
+    Call<AddSuccess> addtutorial(@FieldMap HashMap<String, String> hashMap);
+
+
     @FormUrlEncoded
     @POST("assignment.php")
     Call<AddSuccess> assignment(@FieldMap HashMap<String, String> hashMap);
+
+    @FormUrlEncoded
+    @POST("notification.php")
+    Call<AddSuccess> notification(@FieldMap HashMap<String, String> hashMap);
 
     @GET("category_list.php")
     Call<ResponseBody> catgerylist();
