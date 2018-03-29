@@ -1,6 +1,5 @@
 package com.dapp.dapplication;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
@@ -92,9 +91,7 @@ public class AddNotes extends BaseActivity {
                 }
                 if (check) {
 
-                    final ProgressDialog dialog = new ProgressDialog(AddNotes.this);
-                    dialog.setMessage("Loading...");
-                    dialog.show();
+                   LoadingOn(binding.uploadbutton);
                     String encodedImage = "";
                     if (filepath != null) {
                         encodedImage = convertFileToByteArray(new File(filepath));
@@ -115,7 +112,8 @@ public class AddNotes extends BaseActivity {
                     RestBuilderPro.getService().addnotes(hashMap).enqueue(new Callback<AddSuccess>() {
                         @Override
                         public void onResponse(Call<AddSuccess> call, Response<AddSuccess> response) {
-                            dialog.dismiss();
+                            LoadingOff(binding.uploadbutton);
+
 
                             if (response.isSuccessful()) {
                                 try {
@@ -147,7 +145,8 @@ public class AddNotes extends BaseActivity {
 
                         @Override
                         public void onFailure(Call<AddSuccess> call, Throwable t) {
-                            dialog.dismiss();
+                            LoadingOff(binding.uploadbutton);
+
 
                             SnakBar("Server could not connect");
 
@@ -366,9 +365,13 @@ public class AddNotes extends BaseActivity {
             Uri pickedImage = data.getData();
 
             if (null != pickedImage) {
+                try{
+                    filepath = SelectedFilePath.getPath(AddNotes.this, pickedImage);
+                    binding.fileText.setText(new File(filepath).getName());
+
+                }catch (Exception e){e.printStackTrace();}
                 // Get the path from the Uri
-                filepath = SelectedFilePath.getPath(AddNotes.this, pickedImage);
-                binding.fileText.setText(new File(filepath).getName());
+
 
             }
         }
