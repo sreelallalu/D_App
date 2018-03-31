@@ -45,10 +45,11 @@ public interface ApiInterface {
     Call<SubjectModel> subjectlist(@FieldMap HashMap<String, String> hashMap);
 
 
-
-
     @GET("branchlist.php")
     Call<BatchModel> brachlist();
+
+    @GET("feedback_view.php")
+    Call<ResponseBody> feddbackview();
 
 
     @FormUrlEncoded
@@ -59,6 +60,7 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("addnotes.php")
     Call<AddSuccess> addnotes(@FieldMap HashMap<String, String> hashMap);
+
     @FormUrlEncoded
     @POST("addsyllabus.php")
     Call<AddSuccess> addsyllubus(@FieldMap HashMap<String, String> hashMap);
@@ -88,6 +90,7 @@ public interface ApiInterface {
     Call<ResponseBody> changepass(@Field("user_id") String id,
                                   @Field("user_password") String newpass
     );
+
     @FormUrlEncoded
     @POST("studentlist.php")
     Call<StudentModel> studentlist(@FieldMap HashMap<String, String> hashMap
@@ -106,6 +109,51 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("appointment_result.php")
     Call<ResponseBody> request_send(@Field("result_id") String id);
+
+
+    @FormUrlEncoded
+    @POST("stud_syllobus.php")
+    Call<ResponseBody> viewsyllabus(@FieldMap HashMap<String, String> hashMap);
+
+    @FormUrlEncoded
+    @POST("stud_timetable.php")
+    Call<ResponseBody> viewtimetable(@FieldMap HashMap<String, String> hashMap);
+
+    @FormUrlEncoded
+    @POST("stud_attendance.php")
+    Call<ResponseBody> viewattendance(@FieldMap HashMap<String, String> hashMap);
+
+    @FormUrlEncoded
+    @POST("stud_notes.php")
+    Call<ResponseBody> viewnotes(@FieldMap HashMap<String, String> hashMap);
+
+    @FormUrlEncoded
+    @POST("stud_tutorial.php")
+    Call<ResponseBody> viewtutorial(@FieldMap HashMap<String, String> hashMap);
+
+    @FormUrlEncoded
+    @POST("stud_assignment.php")
+    Call<ResponseBody> viewassignment(@FieldMap HashMap<String, String> hashMap);
+
+    @FormUrlEncoded
+    @POST("stud_notification.php")
+    Call<ResponseBody> viewnotification(@FieldMap HashMap<String, String> hashMap);
+
+    @FormUrlEncoded
+    @POST("stud_sessinal.php")
+    Call<ResponseBody> viewsessional(@FieldMap HashMap<String, String> hashMap);
+
+    @FormUrlEncoded
+    @POST("stud_profile.php")
+    Call<ResponseBody> viewprofile(@FieldMap HashMap<String, String> hashMap);
+
+    @FormUrlEncoded
+    @POST("stud_feedback.php")
+    Call<AddSuccess> feedbackpost(@FieldMap HashMap<String, String> hashMap);
+
+    @FormUrlEncoded
+    @POST("stud_updateprofile.php")
+    Call<ResponseBody> updateprofile(@FieldMap HashMap<String, String> hashMap);
 
 
 }

@@ -46,7 +46,20 @@
         </activity>
         <activity android:name=".StudentDashBoard" />
         <activity android:name=".StudentRegister" />
-        <activity android:name=".admin_module.FeedbackView"></activity>
+        <activity android:name=".admin_module.FeedbackView" />
+        <activity android:name=".student.ViewSyllabus" />
+        <activity android:name=".student.ViewTimetable" />
+        <activity android:name=".student.ViewAttandance" />
+        <activity android:name=".student.ViewNotes" />
+        <activity android:name=".student.ViewTutorial" />
+        <activity android:name=".student.ViewAssignmnet" />
+        <activity android:name=".student.ViewNotification" />
+        <activity android:name=".student.ViewSessional" />
+        <activity
+            android:name=".student.TrailVideo_Web"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".student.FeedBackActivity" />
+        <activity android:name=".student.ProfileUpdation"></activity>
     </application>
 
 </manifest>

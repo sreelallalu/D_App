@@ -118,8 +118,10 @@ public class LoginActivity extends BaseActivity {
 
                             if (response.isSuccessful()) {
                                 try {
+                                    String respo=response.body().string();
+                                    Log.e("value",respo.toString());
 
-                                    JSONObject jsonObject = new JSONObject(response.body().string());
+                                    JSONObject jsonObject = new JSONObject(respo);
                                     Log.e("value",jsonObject.toString());
                                     int succ = jsonObject.getInt("success");
 
