@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import com.dapp.dapplication.BaseActivity;
+import com.dapp.dapplication.Helper.Position;
 import com.dapp.dapplication.Helper.SharedHelper;
 import com.dapp.dapplication.R;
 import com.dapp.dapplication.adapter.BranchAdapter;
@@ -18,7 +19,9 @@ import com.dapp.dapplication.model.AddSuccess;
 import com.dapp.dapplication.model.BatchModel;
 import com.dapp.dapplication.model.SemModel;
 import com.dapp.dapplication.model.SubjectModel;
+import com.dapp.dapplication.model.Teachermodel;
 import com.dapp.dapplication.service.RestBuilderPro;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,16 +43,28 @@ public class AddTutorial extends BaseActivity {
     private String semtId;
     private String regType;
     private AdminTutorialBinding binding;
+    private String tempBrachID;
+    private String tempsemId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_tutorial);
         binding = DataBindingUtil.setContentView(this, R.layout.admin_tutorial);
-        getBranches();
 
         SharedHelper sharedHelper = new SharedHelper(this);
         regType = sharedHelper.getRegType();
+        if(regType.equals("teacher")) {
+            Gson gson = new Gson();
+            String jsonInString = sharedHelper.getTeacherDetails();
+            Teachermodel user = gson.fromJson(jsonInString, Teachermodel.class);
+
+            tempBrachID = user.getTeBranch() + "";
+            tempsemId = user.getTeSem() + "";
+            Log.e("json_type",jsonInString);
+        }
+        getBranches();
+
         binding.uploadbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,6 +163,14 @@ public class AddTutorial extends BaseActivity {
                     binding.branchSpinner.setAdapter(brachadapter);
                     brachadapter.notifyDataSetChanged();
                     binding.branchSpinner.setOnItemSelectedListener(new AddTutorial.BatChlistClick());
+                    if(regType.equals("teacher"))
+                    {
+                        binding.branchSpinner.setSelection(Position.getPosition(tempBrachID,batch_list));
+                        binding.branchSpinner.setClickable(false);
+                        binding.branchSpinner.setEnabled(false);
+                    }
+
+
 
                 } else {
                     SnakBar("Batch list is empty");
@@ -210,6 +233,12 @@ public class AddTutorial extends BaseActivity {
                     binding.semesterSpinner.setAdapter(semAdapter);
                     semAdapter.notifyDataSetChanged();
                     binding.semesterSpinner.setOnItemSelectedListener(new AddTutorial.SemlistClick());
+                    if(regType.equals("teacher"))
+                    {
+                        binding.semesterSpinner.setSelection(Position.getPositionSem(tempsemId,sem_list));
+                        binding.semesterSpinner.setClickable(false);
+                        binding.semesterSpinner.setEnabled(false);
+                    }
 
                 } else {
                     SnakBar("Semester list is empty");

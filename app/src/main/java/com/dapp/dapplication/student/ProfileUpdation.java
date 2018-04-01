@@ -348,7 +348,8 @@ public class ProfileUpdation extends BaseActivity {
 
         return po;
 
-    } private int getPositionSem(String semtId, List<SemModel.Datum> list) {
+    }
+    private int getPositionSem(String semtId, List<SemModel.Datum> list) {
 
         int po = 0;
         try {

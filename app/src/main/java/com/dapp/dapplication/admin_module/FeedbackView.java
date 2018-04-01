@@ -66,7 +66,7 @@ public class FeedbackView extends BaseActivity {
                                     String name=object.getString("fe_content");
                                     //  String content=object.getString("");
                                    // String link=object.getString("sy_data");
-                                  String date=object.getString("fe_date");
+                                     String date=object.getString("fe_date");
 
                                     viewlist.add(new ViewModel(name,"", "", TimeChange.parseDateToddMMyyyy(date)));
 

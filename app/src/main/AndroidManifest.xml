@@ -59,7 +59,11 @@
             android:name=".student.TrailVideo_Web"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".student.FeedBackActivity" />
-        <activity android:name=".student.ProfileUpdation"></activity>
+        <activity android:name=".student.ProfileUpdation" />
+        <activity android:name=".admin_module.AddBranches" />
+        <activity android:name=".admin_module.AddSemester" />
+        <activity android:name=".admin_module.AddTeacher" />
+        <activity android:name=".admin_module.AddSubject"></activity>
     </application>
 
 </manifest>

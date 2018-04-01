@@ -13,6 +13,8 @@ import com.dapp.dapplication.Helper.SharedHelper;
 import com.dapp.dapplication.LoginActivity;
 import com.dapp.dapplication.R;
 import com.dapp.dapplication.databinding.AdminHomepageBinding;
+import com.dapp.dapplication.model.Teachermodel;
+import com.google.gson.Gson;
 
 public class AdminDashBoard extends BaseActivity {
 
@@ -24,6 +26,14 @@ public class AdminDashBoard extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_homepage);
         sharedHelper = new SharedHelper(this);
+
+
+        Gson gson = new Gson();
+        String jsonInString = sharedHelper.getStudentDetails();
+        Teachermodel user = gson.fromJson(jsonInString, Teachermodel.class);
+
+
+        String regtype = sharedHelper.getRegType();
         binding = DataBindingUtil.setContentView(AdminDashBoard.this, R.layout.admin_homepage);
 
         binding.addAssignment.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +91,47 @@ public class AdminDashBoard extends BaseActivity {
 
             }
         });
+        if (regtype.equals("admin")) {
+            binding.addBranches.setVisibility(View.VISIBLE);
+            binding.addBranches.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(AdminDashBoard.this, AddBranches.class));
+                }
+            });
+            binding.addSemester.setVisibility(View.VISIBLE);
+            binding.addSemester.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(AdminDashBoard.this, AddSemester.class));
 
+                }
+            });
+
+            binding.addTeacher.setVisibility(View.VISIBLE);
+            binding.addTeacher.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(AdminDashBoard.this, AddTeacher.class));
+
+                }
+            });
+            binding.addSubject.setVisibility(View.VISIBLE);
+            binding.addSubject.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(AdminDashBoard.this, AddSubject.class));
+
+                }
+            });
+        } else {
+            binding.addBranches.setVisibility(View.INVISIBLE);
+            binding.addSemester.setVisibility(View.INVISIBLE);
+            binding.addTeacher.setVisibility(View.INVISIBLE);
+            binding.addSubject.setVisibility(View.INVISIBLE);
+
+
+        }
     }
 
     @Override
@@ -109,7 +159,7 @@ public class AdminDashBoard extends BaseActivity {
         }
         if (ID == R.id.feedbackview) {
 
-            startActivity(new Intent(this,FeedbackView.class));
+            startActivity(new Intent(this, FeedbackView.class));
 
             return true;
         }

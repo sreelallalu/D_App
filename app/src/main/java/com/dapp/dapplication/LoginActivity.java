@@ -154,7 +154,9 @@ public class LoginActivity extends BaseActivity {
 
                                                     SharedHelper sharedHelper = new SharedHelper(LoginActivity.this);
                                                     sharedHelper.setRegType(reg_type);
+                                                    sharedHelper.setTeacher(jsonObject1.toString());
                                                     sharedHelper.setLoginCheck(true);
+
                                                     startActivity(new Intent(LoginActivity.this, AdminDashBoard.class));
 
                                                 }

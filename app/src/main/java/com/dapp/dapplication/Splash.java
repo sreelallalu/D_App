@@ -35,6 +35,8 @@ public class Splash extends BaseActivity {
 
                     } else if (sharedHelper.getRegType().equalsIgnoreCase("student")) {
                         startActivity(new Intent(Splash.this, StudentDashBoard.class));
+                    } else if (sharedHelper.getRegType().equalsIgnoreCase("teacher")) {
+                        startActivity(new Intent(Splash.this, AdminDashBoard.class));
                     }
 
 

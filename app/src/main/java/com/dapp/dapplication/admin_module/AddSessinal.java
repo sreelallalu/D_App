@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import com.dapp.dapplication.BaseActivity;
+import com.dapp.dapplication.Helper.Position;
 import com.dapp.dapplication.Helper.SharedHelper;
 import com.dapp.dapplication.R;
 import com.dapp.dapplication.adapter.BranchAdapter;
@@ -20,7 +21,9 @@ import com.dapp.dapplication.databinding.AdminAttendanceBinding;
 import com.dapp.dapplication.model.BatchModel;
 import com.dapp.dapplication.model.SemModel;
 import com.dapp.dapplication.model.StudentModel;
+import com.dapp.dapplication.model.Teachermodel;
 import com.dapp.dapplication.service.RestBuilderPro;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,14 +47,27 @@ public class AddSessinal extends BaseActivity {
     private String regType;
     private List<StudentModel.Datum> studentlist=new ArrayList<>();
     private StudentAdapter studentAdapter;
+    private String tempBrachID;
+    private String tempsemId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(AddSessinal.this, R.layout.admin_attendance);
-        getBranches();
+
         SharedHelper sharedHelper = new SharedHelper(this);
         regType = sharedHelper.getRegType();
 
+        if(regType.equals("teacher")) {
+            Gson gson = new Gson();
+            String jsonInString = sharedHelper.getTeacherDetails();
+            Teachermodel user = gson.fromJson(jsonInString, Teachermodel.class);
+
+            tempBrachID = user.getTeBranch() + "";
+            tempsemId = user.getTeSem() + "";
+            Log.e("json_type",jsonInString);
+        }
+        getBranches();
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         binding.studentRecycler.setLayoutManager(mLayoutManager);
         binding.studentRecycler.setItemAnimator(new DefaultItemAnimator());
@@ -75,6 +91,13 @@ public class AddSessinal extends BaseActivity {
                     binding.branchSpinner.setAdapter(brachadapter);
                     brachadapter.notifyDataSetChanged();
                     binding.branchSpinner.setOnItemSelectedListener(new AddSessinal.BatChlistClick());
+                    if(regType.equals("teacher"))
+                    {
+                        binding.branchSpinner.setSelection(Position.getPosition(tempBrachID,batch_list));
+                        binding.branchSpinner.setClickable(false);
+                        binding.branchSpinner.setEnabled(false);
+                    }
+
 
                 } else {
                     SnakBar("Batch list is empty");
@@ -137,7 +160,12 @@ public class AddSessinal extends BaseActivity {
                     binding.semesterSpinner.setAdapter(semAdapter);
                     semAdapter.notifyDataSetChanged();
                     binding.semesterSpinner.setOnItemSelectedListener(new AddSessinal.SemlistClick());
-
+                    if(regType.equals("teacher"))
+                    {
+                        binding.semesterSpinner.setSelection(Position.getPositionSem(tempsemId,sem_list));
+                        binding.semesterSpinner.setClickable(false);
+                        binding.semesterSpinner.setEnabled(false);
+                    }
                 } else {
                     SnakBar("Semester list is empty");
                 }

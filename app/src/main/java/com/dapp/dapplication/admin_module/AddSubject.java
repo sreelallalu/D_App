@@ -8,20 +8,15 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import com.dapp.dapplication.BaseActivity;
-import com.dapp.dapplication.Helper.Position;
 import com.dapp.dapplication.Helper.SharedHelper;
 import com.dapp.dapplication.R;
 import com.dapp.dapplication.adapter.BranchAdapter;
 import com.dapp.dapplication.adapter.SemAdapter;
-import com.dapp.dapplication.adapter.SubjectAdapter;
-import com.dapp.dapplication.databinding.AdminNotificationBinding;
+import com.dapp.dapplication.databinding.AdminAddSubjectBinding;
 import com.dapp.dapplication.model.AddSuccess;
 import com.dapp.dapplication.model.BatchModel;
 import com.dapp.dapplication.model.SemModel;
-import com.dapp.dapplication.model.SubjectModel;
-import com.dapp.dapplication.model.Teachermodel;
 import com.dapp.dapplication.service.RestBuilderPro;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,88 +26,54 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddNotification extends BaseActivity {
+public class AddSubject extends BaseActivity {
 
-    private BranchAdapter brachadapter;
     private List<BatchModel.Datum> batch_list;
-    private List<SemModel.Datum> sem_list=new ArrayList<>();
-    private SemAdapter semAdapter;
     private String batchId;
+    private BranchAdapter brachadapter;
+    private AdminAddSubjectBinding binding;
+    private List<SemModel.Datum> sem_list = new ArrayList<>();
+    private SemAdapter semAdapter;
     private String semtId;
-    private String regType;
-
-    private List<SubjectModel.Datum> subjest_list=new ArrayList<>();
-    private SubjectAdapter subjectAdapter;
     private String subjectId;
     private String subjectId1;
-    private AdminNotificationBinding binding;
-    private String tempBrachID;
-    private String tempsemId;
-
+    private String regType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(AddNotification.this, R.layout.admin_notification);
-        SharedHelper sharedHelper=new SharedHelper(this);
+        setContentView(R.layout.admin_add_subject);
+        binding = DataBindingUtil.setContentView(this, R.layout.admin_add_subject);
+        SharedHelper sharedHelper = new SharedHelper(this);
         regType = sharedHelper.getRegType();
-
-        if(regType.equals("teacher")) {
-            Gson gson = new Gson();
-            String jsonInString = sharedHelper.getTeacherDetails();
-            Teachermodel user = gson.fromJson(jsonInString, Teachermodel.class);
-
-            tempBrachID = user.getTeBranch() + "";
-            tempsemId = user.getTeSem() + "";
-            Log.e("json_type",jsonInString);
-        }
-
         getBranches();
-
-        binding.uploadbutton.setOnClickListener(new View.OnClickListener() {
+        binding.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String title= binding.title.getText().toString().trim();
-                String content= binding.content.getText().toString().trim();
-                boolean check=true;
-                if(title.isEmpty())
-                {
-                    binding.title.setError("Invalid title");
-                    check=false;
-                }
-                if(content.isEmpty())
-                {
-                    binding.content.setError("Invalid content");
+                String semname = binding.addSemedit.getText().toString().trim();
+                if (semname.isEmpty()) {
+                    binding.addSemedit.setError("Invalid semester");
+                } else {
 
-                    check=false;
-
-                }
-                if(check)
-                {
-
-
-                    HashMap<String,String> hashMap=new HashMap<>();
-                    hashMap.put("br_id",batchId);
-                    hashMap.put("se_id",semtId);
-                    hashMap.put("title",title);
-                    hashMap.put("reg_type",regType);
-                    hashMap.put("notification",content);
-                    final ProgressDialog dialog=new ProgressDialog(AddNotification.this);
-                    dialog.setMessage("Loading...");
+                    final ProgressDialog dialog = new ProgressDialog(AddSubject.this);
+                    dialog.setMessage("Loading..");
                     dialog.show();
+                    HashMap<String, String> hashMap = new HashMap<>();
+                    hashMap.put("br_id", batchId);
+                    hashMap.put("se_id", semtId);
+                    hashMap.put("su_name", semname);
+                    hashMap.put("reg_type", regType);
 
-                    RestBuilderPro.getService().notification(hashMap).enqueue(new Callback<AddSuccess>() {
+                    RestBuilderPro.getService().addsubject(hashMap).enqueue(new Callback<AddSuccess>() {
                         @Override
                         public void onResponse(Call<AddSuccess> call, Response<AddSuccess> response) {
                             dialog.dismiss();
-
                             if (response.isSuccessful()) {
                                 try {
 
-                                    AddSuccess data=response.body();
+                                    AddSuccess data = response.body();
 
-                                    if(data.getSuccess()==1)
-                                    {
+                                    if (data.getSuccess() == 1) {
 
                                         SnakBarCallback("Success", new CallbackSnak() {
                                             @Override
@@ -123,8 +84,7 @@ public class AddNotification extends BaseActivity {
                                         });
 
 
-
-                                    }else{
+                                    } else {
                                         SnakBar("Failed");
                                     }
 
@@ -134,12 +94,12 @@ public class AddNotification extends BaseActivity {
                                 }
                             }
 
+
                         }
 
                         @Override
                         public void onFailure(Call<AddSuccess> call, Throwable t) {
                             dialog.dismiss();
-
                             SnakBar("Server could not connect");
 
                         }
@@ -148,7 +108,6 @@ public class AddNotification extends BaseActivity {
                 }
             }
         });
-
 
     }
 
@@ -166,16 +125,10 @@ public class AddNotification extends BaseActivity {
 
                     batch_list = model.getData();
 
-                    brachadapter = new BranchAdapter(AddNotification.this, batch_list);
+                    brachadapter = new BranchAdapter(AddSubject.this, batch_list);
                     binding.branchSpinner.setAdapter(brachadapter);
                     brachadapter.notifyDataSetChanged();
-                    binding.branchSpinner.setOnItemSelectedListener(new AddNotification.BatChlistClick());
-                    if(regType.equals("teacher"))
-                    {
-                        binding.branchSpinner.setSelection(Position.getPosition(tempBrachID,batch_list));
-                        binding.branchSpinner.setClickable(false);
-                        binding.branchSpinner.setEnabled(false);
-                    }
+                    binding.branchSpinner.setOnItemSelectedListener(new AddSubject.BatChlistClick());
 
                 } else {
                     SnakBar("Batch list is empty");
@@ -217,7 +170,7 @@ public class AddNotification extends BaseActivity {
 
         binding.semLoading.setVisibility(View.VISIBLE);
         sem_list.clear();
-        semAdapter = new SemAdapter(AddNotification.this, sem_list);
+        semAdapter = new SemAdapter(AddSubject.this, sem_list);
         binding.semesterSpinner.setAdapter(semAdapter);
         semAdapter.notifyDataSetChanged();
 
@@ -234,16 +187,11 @@ public class AddNotification extends BaseActivity {
 
                     batchId = brId;
 
-                    semAdapter = new SemAdapter(AddNotification.this, sem_list);
+                    semAdapter = new SemAdapter(AddSubject.this, sem_list);
                     binding.semesterSpinner.setAdapter(semAdapter);
                     semAdapter.notifyDataSetChanged();
-                    binding.semesterSpinner.setOnItemSelectedListener(new AddNotification.SemlistClick());
-                    if(regType.equals("teacher"))
-                    {
-                        binding.semesterSpinner.setSelection(Position.getPositionSem(tempsemId,sem_list));
-                        binding.semesterSpinner.setClickable(false);
-                        binding.semesterSpinner.setEnabled(false);
-                    }
+                    binding.semesterSpinner.setOnItemSelectedListener(new AddSubject.SemlistClick());
+
                 } else {
                     SnakBar("Semester list is empty");
                 }
@@ -253,12 +201,10 @@ public class AddNotification extends BaseActivity {
             public void onFailure(Call<SemModel> call, Throwable t) {
                 binding.semLoading.setVisibility(View.GONE);
                 SnakBar("Server could not connect");
-                Log.e("error",t.getMessage());
+                Log.e("error", t.getMessage());
 
             }
         });
-
-
 
 
     }
@@ -266,9 +212,9 @@ public class AddNotification extends BaseActivity {
     private class SemlistClick implements AdapterView.OnItemSelectedListener {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            SemModel.Datum data =sem_list.get(position);
+            SemModel.Datum data = sem_list.get(position);
             if (data.getSeName() != "") {
-                semtId=data.getSeId()+"";
+                semtId = data.getSeId() + "";
             }
 
         }
@@ -277,9 +223,6 @@ public class AddNotification extends BaseActivity {
         public void onNothingSelected(AdapterView<?> parent) {
 
         }
+
     }
-
-
-
-
 }

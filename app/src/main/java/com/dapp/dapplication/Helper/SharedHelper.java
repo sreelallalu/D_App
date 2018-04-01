@@ -26,6 +26,22 @@ public class SharedHelper {
         mSharedPreferences.edit().putString(SHAREVALUE.User_detail, userDetails).apply();
 
     }
+
+    public void setTeacher(String userDetails) {
+
+
+        mSharedPreferences.edit().putString(SHAREVALUE.TeacherD, userDetails).apply();
+
+    }
+
+
+    public String getTeacherDetails() {
+
+
+        return mSharedPreferences.getString(SHAREVALUE.TeacherD, "");
+
+    }
+
     public String getStudentDetails() {
 
 
@@ -34,12 +50,10 @@ public class SharedHelper {
     }
 
 
-
     public void setLoginCheck(boolean b) {
         mSharedPreferences.edit().putBoolean(SHAREVALUE.logincheck, b).apply();
 
     }
-
 
 
     public String getRegType() {
