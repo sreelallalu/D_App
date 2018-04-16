@@ -121,10 +121,11 @@ public class StudentRegister extends BaseActivity {
                     hashMap.put("st_dob",dob);
                     hashMap.put("st_password",pass);
                     hashMap.put("st_email",email);
-                    hashMap.put("st_branchid",address);
+                    hashMap.put("st_address",address);
                     hashMap.put("st_gender",gender);
                     hashMap.put("st_branchid",batchId);
                     hashMap.put("st_semid",semtId);
+                    Log.e("params",hashMap.toString());
 
                  RestBuilderPro.getService().stud_register(hashMap).enqueue(new Callback<ResponseBody>() {
                      @Override
@@ -169,7 +170,9 @@ public class StudentRegister extends BaseActivity {
 
 
                                  } else {
-                                     SnakBar("check user credentials");
+
+                                     String msg=jsonObject.getString("message");
+                                     SnakBar(msg);
                                  }
 
                              } catch (Exception e) {

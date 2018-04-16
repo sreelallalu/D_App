@@ -188,7 +188,8 @@
             android:layout_marginTop="10dp"
             android:ems="10"
             android:hint="Mobile"
-            android:inputType="numberSigned" />
+            android:inputType="numberSigned"
+            android:maxLength="12" />
 
         <EditText
             android:id="@+id/email"
